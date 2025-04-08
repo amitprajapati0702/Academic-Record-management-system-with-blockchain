@@ -1,0 +1,77 @@
+{% extends 'blockchain_records/base.html' %}
+
+{% block title %}Student Records - Academic Blockchain{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-4">
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                <h5 class="card-title mb-0"><i class="fas fa-user-graduate"></i> Student Information</h5>
+            </div>
+            <div class="card-body">
+                <h4>{{ student.user.get_full_name }}</h4>
+                <p class="text-muted">{{ student.user.email }}</p>
+                <hr>
+                <p><strong>Student ID:</strong> {{ student.student_id }}</p>
+                <p><strong>Department:</strong> {{ student.department }}</p>
+                <p><strong>Enrollment Year:</strong> {{ student.enrollment_year }}</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h5 class="card-title mb-0"><i class="fas fa-graduation-cap"></i> Academic Records</h5>
+            </div>
+            <div class="card-body">
+                {% if records %}
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Record Type</th>
+                                    <th>Course</th>
+                                    <th>Grade</th>
+                                    <th>Issue Date</th>
+                                    <th>Issuer</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for record in records %}
+                                    <tr>
+                                        <td>{{ record.get_record_type_display }}</td>
+                                        <td>{% if record.course %}{{ record.course.course_code }}{% else %}-{% endif %}</td>
+                                        <td>{% if record.grade %}{{ record.grade }}{% else %}-{% endif %}</td>
+                                        <td>{{ record.issue_date|date:"M d, Y" }}</td>
+                                        <td>{{ record.issuer.user.get_full_name }}</td>
+                                        <td>
+                                            {% if record.block_hash %}
+                                                <span class="badge bg-success">Verified</span>
+                                            {% else %}
+                                                <span class="badge bg-warning">Pending</span>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            <a href="{% url 'record_detail' record.id %}" class="btn btn-sm btn-primary">
+                                                <i class="fas fa-eye"></i> View
+                                            </a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle"></i> This student doesn't have any academic records yet.
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

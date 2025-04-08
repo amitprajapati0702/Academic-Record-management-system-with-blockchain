@@ -1,0 +1,120 @@
+{% extends 'blockchain_records/base.html' %}
+
+{% block title %}Verify Record - Academic Blockchain{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                <h5 class="card-title mb-0"><i class="fas fa-search"></i> Verify Academic Record</h5>
+            </div>
+            <div class="card-body">
+                <p class="lead">Enter the Record ID to verify its authenticity on the blockchain.</p>
+                
+                <form method="post">
+                    {% csrf_token %}
+                    
+                    <div class="mb-3">
+                        <label for="{{ form.record_id.id_for_label }}" class="form-label">Record ID</label>
+                        {{ form.record_id }}
+                        {% if form.record_id.errors %}
+                            <div class="text-danger">
+                                {{ form.record_id.errors }}
+                            </div>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-check-circle"></i> Verify Record
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        {% if verification_result %}
+            <div class="card">
+                <div class="card-header {% if verification_result.verified %}bg-success{% else %}bg-danger{% endif %} text-white">
+                    <h5 class="card-title mb-0">
+                        {% if verification_result.verified %}
+                            <i class="fas fa-check-circle"></i> Record Verified
+                        {% else %}
+                            <i class="fas fa-times-circle"></i> Verification Failed
+                        {% endif %}
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="alert {% if verification_result.verified %}alert-success{% else %}alert-danger{% endif %}">
+                        {{ verification_result.message }}
+                    </div>
+                    
+                    {% if verification_result.verified %}
+                        <h5>Record Details</h5>
+                        <div class="table-responsive">
+                            <table class="table table-bordered">
+                                <tr>
+                                    <th>Record ID</th>
+                                    <td>{{ verification_result.record.id }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Student</th>
+                                    <td>{{ verification_result.record.student.user.get_full_name }} ({{ verification_result.record.student.student_id }})</td>
+                                </tr>
+                                <tr>
+                                    <th>Record Type</th>
+                                    <td>{{ verification_result.record.get_record_type_display }}</td>
+                                </tr>
+                                {% if verification_result.record.course %}
+                                <tr>
+                                    <th>Course</th>
+                                    <td>{{ verification_result.record.course.course_code }}: {{ verification_result.record.course.title }}</td>
+                                </tr>
+                                {% endif %}
+                                {% if verification_result.record.grade %}
+                                <tr>
+                                    <th>Grade</th>
+                                    <td>{{ verification_result.record.grade }}</td>
+                                </tr>
+                                {% endif %}
+                                <tr>
+                                    <th>Issue Date</th>
+                                    <td>{{ verification_result.record.issue_date|date:"F d, Y, H:i" }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Issuer</th>
+                                    <td>{{ verification_result.record.issuer.user.get_full_name }} ({{ verification_result.record.issuer.position }})</td>
+                                </tr>
+                                <tr>
+                                    <th>Block Hash</th>
+                                    <td class="hash-text">{{ verification_result.record.block_hash }}</td>
+                                </tr>
+                                <tr>
+                                    <th>Block Index</th>
+                                    <td>{{ verification_result.block_index }}</td>
+                                </tr>
+                            </table>
+                        </div>
+                        
+                        <div class="d-grid gap-2 mt-3">
+                            <a href="{% url 'record_detail' verification_result.record.id %}" class="btn btn-primary">
+                                <i class="fas fa-eye"></i> View Full Record Details
+                            </a>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Add Bootstrap classes to form fields
+    document.addEventListener('DOMContentLoaded', function() {
+        document.getElementById('id_record_id').classList.add('form-control');
+    });
+</script>
+{% endblock %}

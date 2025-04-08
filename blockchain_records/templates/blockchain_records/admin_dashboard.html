@@ -1,0 +1,126 @@
+{% extends 'blockchain_records/base.html' %}
+
+{% block title %}Admin Dashboard - Academic Blockchain{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-4">
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                <h5 class="card-title mb-0"><i class="fas fa-user-shield"></i> Admin Panel</h5>
+            </div>
+            <div class="card-body">
+                <h4>{{ user.get_full_name }}</h4>
+                <p class="text-muted">{{ user.email }}</p>
+                <hr>
+                <div class="d-grid gap-2">
+                    <a href="{% url 'admin:index' %}" class="btn btn-primary">
+                        <i class="fas fa-cog"></i> Django Admin
+                    </a>
+                    <a href="{% url 'blockchain_explorer' %}" class="btn btn-success">
+                        <i class="fas fa-link"></i> Blockchain Explorer
+                    </a>
+                    <a href="{% url 'search_students' %}" class="btn btn-info">
+                        <i class="fas fa-search"></i> Search Students
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-8">
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                <h5 class="card-title mb-0"><i class="fas fa-chart-bar"></i> System Statistics</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3 mb-3">
+                        <div class="card bg-primary text-white">
+                            <div class="card-body text-center">
+                                <h3>{{ total_students }}</h3>
+                                <p class="mb-0">Students</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="card bg-success text-white">
+                            <div class="card-body text-center">
+                                <h3>{{ total_faculty }}</h3>
+                                <p class="mb-0">Faculty</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="card bg-info text-white">
+                            <div class="card-body text-center">
+                                <h3>{{ total_courses }}</h3>
+                                <p class="mb-0">Courses</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="card bg-warning text-dark">
+                            <div class="card-body text-center">
+                                <h3>{{ total_records }}</h3>
+                                <p class="mb-0">Records</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row mt-3">
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header bg-light">
+                                <h6 class="mb-0">Blockchain Status</h6>
+                            </div>
+                            <div class="card-body">
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        Total Blocks
+                                        <span class="badge bg-primary rounded-pill">{{ stats.total_blocks }}</span>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        Blockchain Valid
+                                        <span class="badge {% if stats.is_valid %}bg-success{% else %}bg-danger{% endif %} rounded-pill">
+                                            {% if stats.is_valid %}Yes{% else %}No{% endif %}
+                                        </span>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        Mining Difficulty
+                                        <span class="badge bg-secondary rounded-pill">{{ stats.difficulty }}</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header bg-light">
+                                <h6 class="mb-0">Quick Actions</h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="d-grid gap-2">
+                                    <a href="{% url 'admin:blockchain_records_student_changelist' %}" class="btn btn-outline-primary btn-sm">
+                                        <i class="fas fa-user-graduate"></i> Manage Students
+                                    </a>
+                                    <a href="{% url 'admin:blockchain_records_faculty_changelist' %}" class="btn btn-outline-primary btn-sm">
+                                        <i class="fas fa-chalkboard-teacher"></i> Manage Faculty
+                                    </a>
+                                    <a href="{% url 'admin:blockchain_records_course_changelist' %}" class="btn btn-outline-primary btn-sm">
+                                        <i class="fas fa-book"></i> Manage Courses
+                                    </a>
+                                    <a href="{% url 'admin:blockchain_records_academicrecord_changelist' %}" class="btn btn-outline-primary btn-sm">
+                                        <i class="fas fa-file-alt"></i> Manage Records
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,115 @@
+{% extends 'blockchain_records/base.html' %}
+
+{% block title %}Blockchain Explorer - Academic Blockchain{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                <h5 class="card-title mb-0"><i class="fas fa-link"></i> Blockchain Explorer</h5>
+            </div>
+            <div class="card-body">
+                <div class="row mb-4">
+                    <div class="col-md-3">
+                        <div class="card bg-light">
+                            <div class="card-body text-center">
+                                <h3>{{ stats.total_blocks }}</h3>
+                                <p class="mb-0">Total Blocks</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card {% if stats.is_valid %}bg-success{% else %}bg-danger{% endif %} text-white">
+                            <div class="card-body text-center">
+                                <h3>{% if stats.is_valid %}Valid{% else %}Invalid{% endif %}</h3>
+                                <p class="mb-0">Blockchain Status</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card bg-secondary text-white">
+                            <div class="card-body text-center">
+                                <h3>{{ stats.difficulty }}</h3>
+                                <p class="mb-0">Mining Difficulty</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card bg-info text-white">
+                            <div class="card-body text-center">
+                                <h3>{{ blocks.0.timestamp|date:"d/m/Y" }}</h3>
+                                <p class="mb-0">Genesis Block Date</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <h4 class="mb-3">Blockchain Blocks</h4>
+                
+                {% for block in blocks %}
+                    <div class="card block-card mb-3">
+                        <div class="card-header bg-light">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0">Block #{{ block.index }}</h5>
+                                <span class="badge bg-secondary">{{ block.timestamp|date:"F d, Y, H:i:s" }}</span>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="row mb-2">
+                                <div class="col-md-3">
+                                    <strong>Hash:</strong>
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="hash-text p-2 bg-light rounded">
+                                        {{ block.hash }}
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row mb-2">
+                                <div class="col-md-3">
+                                    <strong>Previous Hash:</strong>
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="hash-text p-2 bg-light rounded">
+                                        {{ block.previous_hash }}
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="row mb-2">
+                                <div class="col-md-3">
+                                    <strong>Nonce:</strong>
+                                </div>
+                                <div class="col-md-9">
+                                    {{ block.nonce }}
+                                </div>
+                            </div>
+                            
+                            {% if block.index > 0 %}
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <strong>Data:</strong>
+                                        <div class="p-2 bg-light rounded mt-2">
+                                            <pre class="mb-0">{{ block.data|pprint }}</pre>
+                                        </div>
+                                        
+                                        {% if block.data.record_id %}
+                                            <div class="mt-2">
+                                                <a href="{% url 'record_detail' block.data.record_id %}" class="btn btn-sm btn-primary">
+                                                    <i class="fas fa-eye"></i> View Record
+                                                </a>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,245 @@
+{% extends 'blockchain_records/base.html' %}
+
+{% block title %}Register - Academic Blockchain{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0"><i class="fas fa-user-plus"></i> Register</h4>
+            </div>
+            <div class="card-body">
+                <form method="post" id="registerForm" action="{% url 'register' %}">
+                    {% csrf_token %}
+
+                    <div class="mb-3">
+                        <label class="form-label">Register as:</label>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="user_type" id="student_type" value="student" checked>
+                            <label class="form-check-label" for="student_type">
+                                Student
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="user_type" id="faculty_type" value="faculty">
+                            <label class="form-check-label" for="faculty_type">
+                                Faculty
+                            </label>
+                        </div>
+                    </div>
+
+                    <h5 class="mb-3">Account Information</h5>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="{{ user_form.first_name.id_for_label }}" class="form-label">First Name</label>
+                            {{ user_form.first_name }}
+                            {% if user_form.first_name.errors %}
+                                <div class="text-danger">
+                                    {{ user_form.first_name.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-6">
+                            <label for="{{ user_form.last_name.id_for_label }}" class="form-label">Last Name</label>
+                            {{ user_form.last_name }}
+                            {% if user_form.last_name.errors %}
+                                <div class="text-danger">
+                                    {{ user_form.last_name.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="{{ user_form.username.id_for_label }}" class="form-label">Username</label>
+                            {{ user_form.username }}
+                            {% if user_form.username.errors %}
+                                <div class="text-danger">
+                                    {{ user_form.username.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-6">
+                            <label for="{{ user_form.email.id_for_label }}" class="form-label">Email</label>
+                            {{ user_form.email }}
+                            {% if user_form.email.errors %}
+                                <div class="text-danger">
+                                    {{ user_form.email.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <label for="{{ user_form.password1.id_for_label }}" class="form-label">Password</label>
+                            {{ user_form.password1 }}
+                            {% if user_form.password1.errors %}
+                                <div class="text-danger">
+                                    {{ user_form.password1.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="col-md-6">
+                            <label for="{{ user_form.password2.id_for_label }}" class="form-label">Confirm Password</label>
+                            {{ user_form.password2 }}
+                            {% if user_form.password2.errors %}
+                                <div class="text-danger">
+                                    {{ user_form.password2.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div id="student_fields">
+                        <h5 class="mb-3">Student Information</h5>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="{{ student_form.student_id.id_for_label }}" class="form-label">Student ID</label>
+                                {{ student_form.student_id }}
+                                {% if student_form.student_id.errors %}
+                                    <div class="text-danger">
+                                        {{ student_form.student_id.errors }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6">
+                                <label for="{{ student_form.department.id_for_label }}" class="form-label">Department</label>
+                                {{ student_form.department }}
+                                {% if student_form.department.errors %}
+                                    <div class="text-danger">
+                                        {{ student_form.department.errors }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="{{ student_form.enrollment_year.id_for_label }}" class="form-label">Enrollment Year</label>
+                            {{ student_form.enrollment_year }}
+                            {% if student_form.enrollment_year.errors %}
+                                <div class="text-danger">
+                                    {{ student_form.enrollment_year.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div id="faculty_fields" style="display: none;">
+                        <h5 class="mb-3">Faculty Information</h5>
+
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="{{ faculty_form.faculty_id.id_for_label }}" class="form-label">Faculty ID</label>
+                                {{ faculty_form.faculty_id }}
+                                {% if faculty_form.faculty_id.errors %}
+                                    <div class="text-danger">
+                                        {{ faculty_form.faculty_id.errors }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-6">
+                                <label for="{{ faculty_form.department.id_for_label }}" class="form-label">Department</label>
+                                {{ faculty_form.department }}
+                                {% if faculty_form.department.errors %}
+                                    <div class="text-danger">
+                                        {{ faculty_form.department.errors }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="{{ faculty_form.position.id_for_label }}" class="form-label">Position</label>
+                            {{ faculty_form.position }}
+                            {% if faculty_form.position.errors %}
+                                <div class="text-danger">
+                                    {{ faculty_form.position.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    {% if form.non_field_errors %}
+                        <div class="alert alert-danger">
+                            {{ form.non_field_errors }}
+                        </div>
+                    {% endif %}
+
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary">Register</button>
+                    </div>
+                </form>
+            </div>
+            <div class="card-footer">
+                <p class="mb-0">Already have an account? <a href="{% url 'login' %}">Login here</a></p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Add Bootstrap classes to form fields
+    document.addEventListener('DOMContentLoaded', function() {
+        // User form fields
+        document.getElementById('id_username').classList.add('form-control');
+        document.getElementById('id_email').classList.add('form-control');
+        document.getElementById('id_first_name').classList.add('form-control');
+        document.getElementById('id_last_name').classList.add('form-control');
+        document.getElementById('id_password1').classList.add('form-control');
+        document.getElementById('id_password2').classList.add('form-control');
+
+        // Student form fields
+        document.getElementById('id_student_id').classList.add('form-control');
+        document.getElementById('id_department').classList.add('form-control');
+        document.getElementById('id_enrollment_year').classList.add('form-control');
+
+        // Faculty form fields
+        document.getElementById('id_faculty_id').classList.add('form-control');
+        document.getElementById('id_position').classList.add('form-control');
+
+        // Toggle between student and faculty fields
+        const studentType = document.getElementById('student_type');
+        const facultyType = document.getElementById('faculty_type');
+        const studentFields = document.getElementById('student_fields');
+        const facultyFields = document.getElementById('faculty_fields');
+
+        studentType.addEventListener('change', function() {
+            if (this.checked) {
+                studentFields.style.display = 'block';
+                facultyFields.style.display = 'none';
+            }
+        });
+
+        facultyType.addEventListener('change', function() {
+            if (this.checked) {
+                studentFields.style.display = 'none';
+                facultyFields.style.display = 'block';
+            }
+        });
+
+        // Add form submission handler
+        const form = document.getElementById('registerForm');
+        form.addEventListener('submit', function(event) {
+            console.log('Form submission event triggered');
+            // Prevent the default form submission
+            // event.preventDefault();
+
+            // Log form data
+            const formData = new FormData(form);
+            for (let pair of formData.entries()) {
+                console.log(pair[0] + ': ' + pair[1]);
+            }
+
+            // Submit the form
+            // form.submit();
+        });
+    });
+</script>
+{% endblock %}

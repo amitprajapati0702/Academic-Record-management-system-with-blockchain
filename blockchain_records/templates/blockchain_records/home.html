@@ -1,0 +1,114 @@
+{% extends 'blockchain_records/base.html' %}
+
+{% block title %}Academic Blockchain - Secure Academic Records{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <div class="jumbotron p-5 mb-4 bg-light rounded-3">
+            <h1 class="display-4">Academic Blockchain</h1>
+            <p class="lead">A secure, transparent, and tamper-proof academic record management system using blockchain technology.</p>
+            <hr class="my-4">
+            <p>Our platform ensures the integrity and authenticity of academic records through blockchain technology, making them immutable and easily verifiable.</p>
+            <div class="d-flex gap-2">
+                <a href="{% url 'verify_record' %}" class="btn btn-primary">Verify a Record</a>
+                {% if not user.is_authenticated %}
+                    <a href="{% url 'register' %}" class="btn btn-outline-secondary">Register</a>
+                    <a href="{% url 'enrollment' %}" class="btn btn-outline-success">Student Enrollment</a>
+                    <a href="{% url 'simple_register' %}" class="btn btn-outline-info">Simple Register</a>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title"><i class="fas fa-shield-alt"></i> Tamper-Proof Records</h5>
+                        <p class="card-text">Once a record is added to the blockchain, it cannot be altered or deleted, ensuring the integrity of academic credentials.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title"><i class="fas fa-search"></i> Easy Verification</h5>
+                        <p class="card-text">Anyone can verify the authenticity of academic records without requiring access to the institution's database.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title"><i class="fas fa-lock"></i> Enhanced Security</h5>
+                        <p class="card-text">Cryptographic hashing ensures that records cannot be forged or tampered with, providing a high level of security.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title"><i class="fas fa-history"></i> Complete History</h5>
+                        <p class="card-text">The blockchain maintains a complete history of all academic records, allowing for comprehensive auditing.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                <h5 class="card-title mb-0"><i class="fas fa-chart-bar"></i> System Statistics</h5>
+            </div>
+            <div class="card-body">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        Total Blocks
+                        <span class="badge bg-primary rounded-pill">{{ stats.total_blocks }}</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        Blockchain Valid
+                        <span class="badge {% if stats.is_valid %}bg-success{% else %}bg-danger{% endif %} rounded-pill">
+                            {% if stats.is_valid %}Yes{% else %}No{% endif %}
+                        </span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        Mining Difficulty
+                        <span class="badge bg-secondary rounded-pill">{{ stats.difficulty }}</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        Total Students
+                        <span class="badge bg-info rounded-pill">{{ total_students }}</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        Total Faculty
+                        <span class="badge bg-info rounded-pill">{{ total_faculty }}</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        Total Courses
+                        <span class="badge bg-info rounded-pill">{{ total_courses }}</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        Total Records
+                        <span class="badge bg-info rounded-pill">{{ total_records }}</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header bg-success text-white">
+                <h5 class="card-title mb-0"><i class="fas fa-check-circle"></i> Verify Record</h5>
+            </div>
+            <div class="card-body">
+                <p>Verify the authenticity of any academic record by entering its ID.</p>
+                <a href="{% url 'verify_record' %}" class="btn btn-success w-100">Verify a Record</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

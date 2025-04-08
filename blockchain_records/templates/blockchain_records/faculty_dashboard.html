@@ -1,0 +1,108 @@
+{% extends 'blockchain_records/base.html' %}
+
+{% block title %}Faculty Dashboard - Academic Blockchain{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-4">
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                <h5 class="card-title mb-0"><i class="fas fa-chalkboard-teacher"></i> Faculty Profile</h5>
+            </div>
+            <div class="card-body">
+                <h4>{{ faculty.user.get_full_name }}</h4>
+                <p class="text-muted">{{ faculty.user.email }}</p>
+                <hr>
+                <p><strong>Faculty ID:</strong> {{ faculty.faculty_id }}</p>
+                <p><strong>Department:</strong> {{ faculty.department }}</p>
+                <p><strong>Position:</strong> {{ faculty.position }}</p>
+                <div class="d-grid gap-2 mt-3">
+                    <a href="{% url 'add_record' %}" class="btn btn-primary">
+                        <i class="fas fa-plus-circle"></i> Add New Record
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-8">
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                <h5 class="card-title mb-0"><i class="fas fa-book"></i> Your Courses</h5>
+            </div>
+            <div class="card-body">
+                {% if courses %}
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Course Code</th>
+                                    <th>Title</th>
+                                    <th>Credits</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for course in courses %}
+                                    <tr>
+                                        <td>{{ course.course_code }}</td>
+                                        <td>{{ course.title }}</td>
+                                        <td>{{ course.credits }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle"></i> You don't have any assigned courses yet.
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h5 class="card-title mb-0"><i class="fas fa-file-alt"></i> Records Issued</h5>
+            </div>
+            <div class="card-body">
+                {% if issued_records %}
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Student</th>
+                                    <th>Record Type</th>
+                                    <th>Course</th>
+                                    <th>Grade</th>
+                                    <th>Issue Date</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for record in issued_records %}
+                                    <tr>
+                                        <td>{{ record.student.student_id }}</td>
+                                        <td>{{ record.get_record_type_display }}</td>
+                                        <td>{% if record.course %}{{ record.course.course_code }}{% else %}-{% endif %}</td>
+                                        <td>{% if record.grade %}{{ record.grade }}{% else %}-{% endif %}</td>
+                                        <td>{{ record.issue_date|date:"M d, Y" }}</td>
+                                        <td>
+                                            <a href="{% url 'record_detail' record.id %}" class="btn btn-sm btn-primary">
+                                                <i class="fas fa-eye"></i> View
+                                            </a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle"></i> You haven't issued any records yet.
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

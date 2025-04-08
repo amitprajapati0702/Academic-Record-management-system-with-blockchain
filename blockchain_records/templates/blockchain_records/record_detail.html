@@ -1,0 +1,147 @@
+{% extends 'blockchain_records/base.html' %}
+
+{% block title %}Record Details - Academic Blockchain{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                <h5 class="card-title mb-0"><i class="fas fa-file-alt"></i> Academic Record Details</h5>
+            </div>
+            <div class="card-body">
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <strong>Record ID:</strong>
+                    </div>
+                    <div class="col-md-8">
+                        {{ record.id }}
+                    </div>
+                </div>
+                
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <strong>Record Type:</strong>
+                    </div>
+                    <div class="col-md-8">
+                        {{ record.get_record_type_display }}
+                    </div>
+                </div>
+                
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <strong>Student:</strong>
+                    </div>
+                    <div class="col-md-8">
+                        {{ record.student.user.get_full_name }} ({{ record.student.student_id }})
+                    </div>
+                </div>
+                
+                {% if record.course %}
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <strong>Course:</strong>
+                    </div>
+                    <div class="col-md-8">
+                        {{ record.course.course_code }}: {{ record.course.title }}
+                    </div>
+                </div>
+                
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <strong>Credits:</strong>
+                    </div>
+                    <div class="col-md-8">
+                        {{ record.course.credits }}
+                    </div>
+                </div>
+                {% endif %}
+                
+                {% if record.grade %}
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <strong>Grade:</strong>
+                    </div>
+                    <div class="col-md-8">
+                        {{ record.grade }}
+                    </div>
+                </div>
+                {% endif %}
+                
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <strong>Issue Date:</strong>
+                    </div>
+                    <div class="col-md-8">
+                        {{ record.issue_date|date:"F d, Y, H:i" }}
+                    </div>
+                </div>
+                
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <strong>Issuer:</strong>
+                    </div>
+                    <div class="col-md-8">
+                        {{ record.issuer.user.get_full_name }} ({{ record.issuer.position }})
+                    </div>
+                </div>
+                
+                {% if record.description %}
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <strong>Description:</strong>
+                    </div>
+                    <div class="col-md-8">
+                        {{ record.description }}
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card mb-4">
+            <div class="card-header {% if verification.verified %}bg-success{% else %}bg-danger{% endif %} text-white">
+                <h5 class="card-title mb-0">
+                    {% if verification.verified %}
+                        <i class="fas fa-check-circle"></i> Verified on Blockchain
+                    {% else %}
+                        <i class="fas fa-times-circle"></i> Not Verified
+                    {% endif %}
+                </h5>
+            </div>
+            <div class="card-body">
+                <p>{{ verification.message }}</p>
+                
+                {% if verification.verified %}
+                    <div class="mb-3">
+                        <strong>Block Index:</strong> {{ verification.block_index }}
+                    </div>
+                    <div class="mb-3">
+                        <strong>Timestamp:</strong> {{ verification.timestamp|date:"F d, Y, H:i" }}
+                    </div>
+                {% endif %}
+                
+                {% if record.block_hash %}
+                    <div class="mb-3">
+                        <strong>Block Hash:</strong>
+                        <div class="hash-text mt-1 p-2 bg-light rounded">
+                            {{ record.block_hash }}
+                        </div>
+                    </div>
+                {% endif %}
+                
+                <div class="d-grid gap-2 mt-3">
+                    <a href="{% url 'verify_record' %}" class="btn btn-primary">
+                        <i class="fas fa-search"></i> Verify Another Record
+                    </a>
+                    <a href="{% url 'blockchain_explorer' %}" class="btn btn-outline-secondary">
+                        <i class="fas fa-link"></i> Blockchain Explorer
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
